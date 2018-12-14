@@ -28,28 +28,28 @@ Matlab R2016b and work well.
 Two IQA datasets, [LIVE](http://live.ece.utexas.edu/research/quality/subjective.htm) and
 [TID2013](http://www.ponomarenko.info/tid2013.htm), are used in out experiments.
 
-This table shows the good performance of ENIQA compared with several classical NR and FR
-IQA methods
+This table shows the SROCC values of ENIQA and several classical NR and FR IQA methods
+on the LIVE dataset
 
-MEDIAN SROCC VALUES ON THE LIVE DATABASE
 |Method|JP2K|JPEG|WN|GBlur|FF|All|
 |:----:|:--:|:--:|:-:|:--:|:-:|:-:|
-|PSNR|0.9053|0.8866|**0.9844**|0.8120|0.8981|0.8850|
-|SSIM|**0.9517**|**0.9671**|0.9631|0.9306|0.9404|0.9255|
-|VIF|0.9160|0.9482|0.9435|**0.9600**|**0.9617**|**0.9287**|
+|*PSNR*|0.9053|0.8866|**0.9844**|0.8120|0.8981|0.8850|
+|*SSIM*|**0.9517**|**0.9671**|0.9631|0.9306|0.9404|0.9255|
+|*VIF*|0.9160|0.9482|0.9435|**0.9600**|**0.9617**|**0.9287**|
 | | | | | | | |
-|BIQI|0.8401|0.8425|0.9362|0.8924|0.7383|0.8340|
-|DIIVINE|<u>0.9363</u>|0.9051|0.9692|0.9478|0.8778|0.9261|
-|BLIINDS-II|**0.9389**|0.9449|0.9596|0.9447|0.8653|0.9362|
-|BRISQUE|0.9349|0.9480|0.9725|<u>0.9616</u>|0.8821|**0.9411**|
-|NIQE|0.9171|0.9094|0.9697|**0.9678**|0.8715|0.9142|
-|ILNIQE|0.9199|0.9335|<u>0.9730</u>|0.9526|**0.8991**|0.9219|
-|SSEQ|0.9355|**0.9509**|0.9689|0.9554|<u>0.8943</u>|0.9349|
-|ENIQA|0.9333|<u>0.9485</u>|**0.9808**|0.9531|0.8568|<u>0.9363</u>|
+|*BIQI*|0.8401|0.8425|0.9362|0.8924|0.7383|0.8340|
+|*DIIVINE*|0.9363|0.9051|0.9692|0.9478|0.8778|0.9261|
+|*BLIINDS-II*|**0.9389**|0.9449|0.9596|0.9447|0.8653|0.9362|
+|*BRISQUE*|0.9349|0.9480|0.9725|0.9616|0.8821|**0.9411**|
+|*NIQE*|0.9171|0.9094|0.9697|**0.9678**|0.8715|0.9142|
+|*ILNIQE*|0.9199|0.9335|0.9730|0.9526|**0.8991**|0.9219|
+|*SSEQ*|0.9355|**0.9509**|0.9689|0.9554|0.8943|0.9349|
+|*ENIQA*|0.9333|0.9485|**0.9808**|0.9531|0.8568|0.9363|
 
 ## Usage
 
 For evaluating, we provide two ways:
+
 You can first load the RGB image and then calculate the score by
 
 ```MATLAB
