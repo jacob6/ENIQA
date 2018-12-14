@@ -17,7 +17,7 @@ IQA methods
 ## Usage
 
 For evaluating, we provide two ways:
-You can first load the image and then calculate the score by
+You can first load the RGB image and then calculate the score by
 
 ```MATLAB
 img = imread(img_path);
