@@ -32,6 +32,7 @@ This table shows the good performance of ENIQA compared with several classical N
 IQA methods
 
 MEDIAN SROCC VALUES ON THE LIVE DATABASE
+
 |Method|JP2K|JPEG|WN|GBlur|FF|All|
 |:----:|:--:|:--:|:-:|:--:|:-:|:-:|
 |PSNR|0.9053|0.8866|**0.9844**|0.8120|0.8981|0.8850|
