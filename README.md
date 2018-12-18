@@ -71,7 +71,7 @@ To do this, you have to prepare a model pretrained on another dataset.
 
 ## Pretrained models
 
-We have trained a model on the whole LIVE dataset and you can find it in ENIQA_release/model.
+We have trained a model on the whole LIVE dataset and you can find it in `ENIQA_release/model`.
 
 ## Dependencies
 
