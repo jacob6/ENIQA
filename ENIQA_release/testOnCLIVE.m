@@ -41,4 +41,4 @@ end
 %% Scatter plot
 [SROCC, PLCC, RMSE] = evaluate(mos, scores)
 
-drawScatter(mos_sel, scores, 'Objective score by ENIQA', 'MOS', 'CLIVE');
+drawScatter(mos, scores, 'Objective score by ENIQA', 'MOS', 'CLIVE');
