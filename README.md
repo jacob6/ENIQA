@@ -85,7 +85,7 @@ You can download it from [here](https://www.csie.ntu.edu.tw/~cjlin/libsvm/).
 
 ---
 
-Change Log for `Version 0.1.0`
+## Change Log for `Version 0.1.0`
 
 + There were a couple of serious flaws in the former version and now we have fixed them in `v0.1.0`. 
 
