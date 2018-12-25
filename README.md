@@ -43,8 +43,10 @@ on the LIVE dataset
 |*BRISQUE*|0.9349|0.9480|0.9725|0.9616|0.8821|**0.9411**|
 |*NIQE*|0.9171|0.9094|0.9697|**0.9678**|0.8715|0.9142|
 |*ILNIQE*|0.9199|0.9335|0.9730|0.9526|**0.8991**|0.9219|
-|*SSEQ*|0.9355|**0.9509**|0.9689|0.9554|0.8943|0.9349|
-|*ENIQA*|0.9333|0.9485|**0.9808**|0.9531|0.8568|0.9363|
+|*SSEQ*|0.9355|0.9509|0.9689|0.9554|0.8943|0.9349|
+|*ENIQA*|0.9255|**0.9515**|**0.9762**|0.9481|0.8491|0.9378|
+
+For details of the experiments, please see the paper.
 
 ## Usage
 
@@ -63,6 +65,8 @@ or simply input the path of the image
 score = ENIQA(img_path);
 ```
 
+The range of the output score is expected to be [0,1] and a lower score represents higher quality. 
+
 For training a new model on LIVE, try `crossValidationOnLIVE`
 
 For cross-database evaluation, try `testOnTID2013`
@@ -77,3 +81,13 @@ We have trained a model on the whole LIVE dataset and you can find it in `ENIQA_
 
 libSVM, explicitly the mex files, is required to perform the classification and regression.
 You can download it from [here](https://www.csie.ntu.edu.tw/~cjlin/libsvm/).
+
+
+---
+Change Log for Version 0.1.0
+
++There were a couple of serious flaws in the former version and now we have fixed them in v0.1.0. 
+
++The script to test the model on [CLIVE](http://live.ece.utexas.edu/research/ChallengeDB/index.html) is available. 
+
++Code refactoring to accelerate feature extraction. 
