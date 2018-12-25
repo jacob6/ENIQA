@@ -84,10 +84,11 @@ You can download it from [here](https://www.csie.ntu.edu.tw/~cjlin/libsvm/).
 
 
 ---
-Change Log for Version 0.1.0
 
-+There were a couple of serious flaws in the former version and now we have fixed them in v0.1.0. 
+Change Log for `Version 0.1.0`
 
-+The script to test the model on [CLIVE](http://live.ece.utexas.edu/research/ChallengeDB/index.html) is available. 
++ There were a couple of serious flaws in the former version and now we have fixed them in `v0.1.0`. 
 
-+Code refactoring to accelerate feature extraction. 
++ The script to test the model on [CLIVE](http://live.ece.utexas.edu/research/ChallengeDB/index.html) is available. 
+
++ Code refactoring to accelerate feature extraction. 
