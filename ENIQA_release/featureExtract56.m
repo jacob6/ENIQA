@@ -1,6 +1,9 @@
-function [f t] = featureExtract56( imrgb ,scale)
-    t=[];
-    f=[];
+function [f, t] = featureExtract56( imrgb ,scale)
+    % Set @scale to extract features in different scales
+    t=zeros(1, 12*scale);
+    tt = zeros(1, 12);
+    f=zeros(1,28*scale);
+    fea=zeros(1, 16);
     imdist=rgb2gray(imrgb);
 
     minWaveLength = 2.4;
@@ -12,42 +15,32 @@ function [f t] = featureExtract56( imrgb ,scale)
     wsize = [8 8];
     
     for i=1:scale        
-        sort_t=[];
-        
-        im=imdist;
-        imsa=saliencyMap(im);
-        fun0=@sumBlock;
-        emat=blkproc(imsa,wsize ,fun0); 
-        emat=emat(:)';
+        imsa=saliencyMap(imdist);
+        emat = im2col(imsa, wsize, 'distinct');
+        emat = sum(emat);
         sort_t = sort(emat,'ascend');
         len = length(sort_t);
         tsort=sort_t(ceil(len*0.2):ceil(len*1));
         A=ismember(emat,tsort);
        
         t1=clock;
-        im=imdist;
-        fun1=@bisecal;
-        femat=blkproc(im,wsize,fun1);
-        femat=femat(:)';
-        femat=femat(A);
-
+        femat=im2col(imdist, wsize, 'distinct');
+        femat=femat(:,A);
+        femat=arrayfun(@(i) bisecal(femat(:,i), wsize), 1:size(femat, 2));
         sort_t = sort(femat,'ascend');
         mu= mean(sort_t);
         ske=skewness(sort_t);
         f2=[ mu  ske];        
-        a=etime(clock,t1);
-        t=[t a];
+        tt(1)=etime(clock,t1);
 
         t1=clock;
-        [f3 f4 f5]=mutualInformation(imrgb);
-        a=etime(clock,t1);
-        t=[t a];
+        [f3, f4, f5]=mutualInformation(imrgb);
+        tt(2)=etime(clock,t1);
         
         [rows,cols] = size(imdist);
         LGFilters = logGabors(rows,cols,minWaveLength/(scale^scaleFactorForLoG),sigmaOnf,mult,dThetaOnSigma);
         fftIm = fft2(imdist);
         
-        fea=[];
         imggabor={8,1};
         for scaleIndex = 1:2
             for oriIndex = 1:4
@@ -55,20 +48,20 @@ function [f t] = featureExtract56( imrgb ,scale)
                     
                     t1=clock;
                     im=uint8(abs(response));
-                    fun1=@bisecal;
-                    femat1=blkproc(im,wsize,fun1);
-                    femat1=femat1(:)';
-                    femat1=femat1(A);
+                    femat1=im2col(im, wsize, 'distinct');
+                    femat1=femat1(:,A);
+                    femat1=arrayfun(@(i) bisecal(femat1(:,i), wsize), 1:size(femat1, 2));
 
                     sort_t = sort(femat1,'ascend');
                     mu= mean(sort_t);
                     ske=skewness(sort_t);
                     fea2=[ mu ske];        
-                    a=etime(clock,t1);
-                    t=[t a];
-                    imggabor{((scaleIndex-1)*4+oriIndex),1}=im;
+                    idx = ((scaleIndex-1)*4+oriIndex);
+                    tt(2+idx) = etime(clock,t1);
+                    imggabor{idx,1}=im;
 
-                    fea=[fea fea2] ;
+                    idx = ((scaleIndex-1)*4+oriIndex)*2-1;
+                    fea(idx:idx+1) = fea2;
             end
         end 
         
@@ -76,8 +69,7 @@ function [f t] = featureExtract56( imrgb ,scale)
         imggaborscale{1,1}=imggabor{1,1}+imggabor{2,1}+imggabor{3,1}+imggabor{4,1};
         imggaborscale{2,1}=imggabor{5,1}+imggabor{6,1}+imggabor{7,1}+imggabor{8,1};
         f9=MI(imggaborscale{1,1},imggaborscale{2,1});
-        a=etime(clock,t1);
-        t=[t a];
+        tt(11) = etime(clock,t1);
         
         t1=clock;
         imggaborori{1,1}=imggabor{1,1}+imggabor{5,1};
@@ -90,12 +82,12 @@ function [f t] = featureExtract56( imrgb ,scale)
         f13=MI(imggaborori{2,1},imggaborori{3,1});
         f14=MI(imggaborori{2,1},imggaborori{4,1});
         f15=MI(imggaborori{3,1},imggaborori{4,1});
-        a=etime(clock,t1);
-        t=[t a];
+        tt(12) = etime(clock,t1);
         
         % Note that the order of features in this vector is different from 
         % that in the paper
-        f=[f f2 f3 f4 f5 fea f9 f10 f11 f12 f13 f14 f15];
+        f((i-1)*28+1:i*28)=[f2 f3 f4 f5 fea f9 f10 f11 f12 f13 f14 f15];
+        t((i-1)*12+1:i*12) = tt;
         imdist = imresize(imdist,0.5);
         imrgb = imresize(imrgb,0.5); 
     end

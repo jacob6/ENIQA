@@ -7,7 +7,7 @@ warning off;
 
 % Directory of the database
 % Change it to your own
-src = '/media/yang/0001DB8C00052535/mengxiting/database/LIVE2016/databaserelease2/';
+src = 'E:/mengxiting/database/LIVE2016/databaserelease2/';
 
 ranges = [{1:227}; {228:460}; {461:634}; {635:808}; {809:982}];
 dirs = {'jp2k/'; 'jpeg/'; 'wn/'; 'gblur/'; 'fastfading/'};
@@ -23,7 +23,7 @@ name_imgs = {'bikes.bmp'; 'building2.bmp'; 'buildings.bmp'; 'caps.bmp'
 load([src 'dmos']);
 features = zeros(982, 56);
 
-N = 1000;   % The number of epochs
+N = 1000;   % The number of sessions
 
 SEL_PER = 80/100;   % The percentage of training set
 
@@ -43,20 +43,25 @@ RMSEs = zeros(N, n_dis+1);
 
 pred_acc = zeros(n_dis, n_dis, N);
 
+SROCC_best = 0;
+
 %% Extract features
-for i = 1:n_dis
-    k_range = ranges{i};
-    img_dir = [src, dirs{i}];
-    features(ranges{i},:) = featureExtract(k_range, img_dir);
-end
+% for i = 1:n_dis
+%     k_range = ranges{i};
+%     img_dir = [src, dirs{i}];
+%     features(ranges{i},:) = featureExtractLIVE(k_range, img_dir);
+% end
+
 % The feature extraction might take long, 
 % thus, you could save the features for next time use
 % save('data/ENIQA_features_56_w8_on_LIVE', 'features');
-% load('data/ENIQA_features_56_w8_on_LIVE', 'features')
-
+load('data/ENIQA_features_56_w8_on_LIVE', 'features')
+% idx_map = [7:8, 1:3, 11:26, 55, 43:48, 9:10, 4:6, 27:42, 56, 49:54];
+% [~,idx_map_r] = sort(idx_map);
+% features = features(:,idx_map_r(43:end));
 disp('Features extracted')
 
-%% Train and test for N epochs
+%% Train and test for N times
 % Generate a combination list for selection
 n_imgs = length(name_imgs);
 n_imgs_sel = round(n_imgs*SEL_PER);
@@ -65,7 +70,7 @@ load('data/COMs')
 len = size(COMs,1);
 
 for n = 1:N
-    disp(['Epoch ', num2str(n)])
+    disp(['Session ', num2str(n)])
     
     %% Split the data sets for cross validation
     feature_train = cell(n_dis,1);
@@ -93,8 +98,6 @@ for n = 1:N
         feature_test{i} = features_cur(~lia,:);
         label_test{i} = dmos_cur(~lia);
     end
-    
-    %     disp('Datasets split')
     
     %% Cross validation
     % Convert the training and testing datasets into matrices
@@ -129,24 +132,29 @@ for n = 1:N
     
     score_all = cell2mat(scores);
     [SROCCs(n,end), PLCCs(n,end), RMSEs(n,end)] = evaluate(y_test, score_all);
-
+    
+    if SROCCs(n,end) > SROCC_best
+        score_best = score_all;
+        y_test_best = y_test;
+        svcmodel_sel = svcmodel;
+        svrmodels_sel = svrmodels(n,:);
+        SROCC_best = SROCCs(n,end);
+    end
 end
 
 %% Calculate medians
 RMSEs = feval(fcn_denorm, RMSEs);
 
-SROCC_all_mid = median(SROCCs(:,n_dis+1));
-[~, idx] = min(abs(SROCCs(:,n_dis+1) - SROCC_all_mid));
+SROCC_all_mid = median(SROCCs(:,end));
 SROCC_mid = median(SROCCs);
 PLCC_mid = median(PLCCs);
 RMSE_mid = median(RMSEs);
 
-pred_acc_mid = pred_acc(:,:,idx);
-pred_acc_type_mid = diag(pred_acc_mid);
-pred_acc_all_mid = mean(pred_acc_type_mid);
+pred_acc_avg = mean(pred_acc, 3);
+pred_acc_type_avg = diag(pred_acc_avg);
+pred_acc_all_avg = mean(pred_acc_type_avg);
 
-svcmodel_sel = svcmodels{idx};
-svrmodel_sel = svrmodels(idx,:);
-
+drawScatter(y_test, score_all, 'Objective score by ENIQA', 'DMOS', 'LIVE');
+    
 % Uncomment this if you want to save the best result
-% save('model/best_models', 'svcmodel_sel', 'svrmodel_sel')
+% save('model/best_models', 'svcmodel_sel', 'svrmodels_sel')
