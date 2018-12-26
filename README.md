@@ -17,7 +17,7 @@ of different categories of distorted images, and has a low complexity.
 
 ## Authors
 
-Guangyi Yang, Qingyi Zhang, Manhui Lin, Deshi Li, and Chu He, Member, IEEE
+Xiaoqiao Chen, Qingyi Zhang, Manhui Lin, Guangyi Yang<sup>*</sup>, and Chu He, Member, IEEE
 
 ## Experiments
 
