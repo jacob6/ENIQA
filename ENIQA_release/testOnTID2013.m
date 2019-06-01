@@ -42,10 +42,8 @@ scores = zeros(n, 1);
 load('data/ENIQA_features_56_w8_on_TID2013', 'features');
 disp('Predicting scores...');
 for i = 1:n
-    % Extract features in 2 scales
     file_name_cur = file_names_sel{i};
     disp(['Current Image: ', file_name_cur]);
-    img_cur = imread([src, 'distorted_images/', file_name_cur]);
     scores(i) = predict(features(i,:), svrmodels, svcmodel);
 end
 
